@@ -97,7 +97,7 @@ func (m *Manager) Replay(ctx context.Context, reqInput models.ReplayRequest) (st
 	}
 
 	// no need to save this request if all workers are busy
-	if int(m.numBusyWorkers) == m.config.NumWorkers {
+	if int(atomic.LoadInt32(&m.numBusyWorkers)) == m.config.NumWorkers {
 		return "", ErrRequestQueueFull
 	}
 
